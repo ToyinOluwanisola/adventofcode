@@ -43,14 +43,20 @@ func readFromFile() {
 	elfSlice = append(elfSlice, calories) //add last elf's calories
 
 	//fmt.Println("calories  ", elfSlice)
-	sort.Slice(elfSlice, func(i, j int) bool {
-		return elfSlice[i] > elfSlice[j] // > = asending / < = descending
-	})
+	// sort.Slice(elfSlice, func(i, j int) bool {
+	// 	return elfSlice[i] > elfSlice[j] // > = asending / < = descending
+	// })
+	// fmt.Println("Largest calories  ", elfSlice[0])
+	// totalSum := elfSlice[0] + elfSlice[1] + elfSlice[2]
+
 	// for _, v := range elfSlice {
 	// 	fmt.Println(v)
 	// }
-	fmt.Println("Largest calories  ", elfSlice[0])
-	totalSum := elfSlice[0] + elfSlice[1] + elfSlice[2]
+
+	sort.Ints(elfSlice)
+	countCalories := len(elfSlice)
+	fmt.Println("Largest calories  ", elfSlice[countCalories-1])
+	totalSum := elfSlice[countCalories-1] + elfSlice[countCalories-2] + elfSlice[countCalories-3]
 
 	fmt.Println("Total of top 3 calories  ", totalSum)
 
