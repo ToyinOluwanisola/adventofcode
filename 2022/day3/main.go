@@ -9,6 +9,8 @@ import (
 
 const priority = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+var priorityDuplicateItems = []string{}
+
 func main() {
 	priorityMap := makePriorityMap(strings.Split(priority, ""))
 	//fmt.Println(priorityMap)
@@ -20,7 +22,6 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	duplicateItems := make(map[string]bool)
 
 	for scanner.Scan() {
 		rucksack := strings.Split(scanner.Text(), "")
@@ -31,6 +32,7 @@ func main() {
 		//fmt.Println(fisrtCompartment)
 		//fmt.Println(secondCompartment)
 
+		duplicateItems := make(map[string]bool)
 		for _, firstItem := range fisrtCompartment { //find items duplicated in each compartment
 			for _, secondItem := range secondCompartment {
 				if firstItem == secondItem {
@@ -38,10 +40,11 @@ func main() {
 				}
 			}
 		}
+		appendDuplicates(duplicateItems)
 		//break
 	}
-	//fmt.Println(duplicateItems)
-	fmt.Println("Sum of priorities = ", getSumofPriorities(duplicateItems, priorityMap))
+	//fmt.Println(priorityDuplicateItems)
+	fmt.Println("Sum of priorities = ", getSumofPriorities(priorityDuplicateItems, priorityMap))
 
 }
 func makePriorityMap(priority []string) map[string]int {
@@ -52,9 +55,16 @@ func makePriorityMap(priority []string) map[string]int {
 	}
 	return priorityMap
 }
-func getSumofPriorities(duplicates map[string]bool, priorityMap map[string]int) int {
-	total := 0
+
+func appendDuplicates(duplicates map[string]bool) {
 	for key := range duplicates {
+		priorityDuplicateItems = append(priorityDuplicateItems, key)
+	}
+
+}
+func getSumofPriorities(duplicates []string, priorityMap map[string]int) int {
+	total := 0
+	for _, key := range duplicates {
 		total += priorityMap[key]
 	}
 	return total
