@@ -14,6 +14,7 @@ func main() {
 
 func partOne() {
 	totalContainedPairs := 0
+	totalOverlappedPairs := 0
 	file, err := os.Open("file.txt")
 	if err != nil {
 		fmt.Println("Error reading file")
@@ -25,8 +26,12 @@ func partOne() {
 		if isRangeFullyContained(strings.Split(scanner.Text(), ",")) {
 			totalContainedPairs++
 		}
+		if isOverlapped(strings.Split(scanner.Text(), ",")) {
+			totalOverlappedPairs++
+		}
 	}
 	fmt.Println("fully contained assignment pairs: ", totalContainedPairs)
+	fmt.Println("overlapped pairs: ", totalOverlappedPairs)
 }
 
 func isRangeFullyContained(pairs []string) bool {
@@ -66,6 +71,35 @@ func isRangeFullyContained(pairs []string) bool {
 	}
 
 	return isRangeContained
+
+}
+
+func isOverlapped(pairs []string) bool {
+	isOverlapped := false
+	elfOne := getElfsSections(pairs[0])
+	elfTwo := getElfsSections(pairs[1])
+
+	if len(elfOne) >= len(elfTwo) {
+		for _, elfOneSection := range elfOne {
+			for _, elfTwoSection := range elfTwo {
+				if elfOneSection == elfTwoSection {
+					isOverlapped = true
+					break
+				}
+			}
+		}
+	} else {
+		for _, elfTwoSection := range elfTwo {
+			for _, elfOneSection := range elfOne {
+				if elfTwoSection == elfOneSection {
+					isOverlapped = true
+					break
+				}
+			}
+		}
+	}
+
+	return isOverlapped
 
 }
 
